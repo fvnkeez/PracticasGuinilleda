@@ -17,7 +17,7 @@ const db = await mysql.createConnection({
 // Rutas
 app.get('/api/datos', async (req, res) => {
   try {
-    const [rows] = await db.query('SELECT * FROM tu_tabla');
+    const [rows] = await db.query('SELECT * FROM usuarios');
     res.json(rows);
   } catch (err) {
     res.status(500).json({ error: err.message });
@@ -28,7 +28,7 @@ app.post('/api/datos', async (req, res) => {
   const { nombre, valor } = req.body;
   try {
     const [result] = await db.query(
-      'INSERT INTO tu_tabla (nombre, valor) VALUES (?, ?)',
+      'INSERT INTO usuarios (nombre, valor) VALUES (?, ?)',
       [nombre, valor]
     );
     res.json({ id: result.insertId, nombre, valor });
