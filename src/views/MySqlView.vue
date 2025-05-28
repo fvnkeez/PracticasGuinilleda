@@ -21,7 +21,7 @@ const showMessage = (msg, type = 'success') => {
 // Asynchronous method to fetch data from the API
 const obtenerDatos = async () => {
   try {
-    const response = await fetch('http://localhost:3001/api/datos');
+    const response = await fetch('http://192.168.1.166:3006/api/datos');
     if (!response.ok) {
       throw new Error(`HTTP error! status: ${response.status}`);
     }
@@ -42,7 +42,7 @@ const agregarDato = async () => {
   }
 
   try {
-    const response = await fetch('http://localhost:3001/api/datos', {
+    const response = await fetch('http://192.168.1.166:3006/api/datos', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

@@ -3,14 +3,18 @@ import mysql from 'mysql2/promise'; // Versión con promesas
 import cors from 'cors';
 
 const app = express();
-app.use(cors());
+app.use(cors({
+  origin: 'http://localhost:5173', // o el puerto de tu aplicación Vue
+  methods: ['GET', 'POST', 'PUT', 'DELETE'],
+  allowedHeaders: ['Content-Type']
+}));
 app.use(express.json());
 
 // Configuración MySQL
 const db = await mysql.createConnection({
-  host: 'localhost',
-  user: 'root',
-  password: 'Password1234',
+  host: '192.168.1.166',
+  user: 'Dani',
+  password: 'Dani1234',
   database: 'mibbddvue'
 });
 
@@ -37,7 +41,7 @@ app.post('/api/datos', async (req, res) => {
   }
 });
 
-const PORT = 3001;
+const PORT = 3006;
 app.listen(PORT, () => {
-  console.log(`Servidor en http://localhost:${PORT}`);
+  console.log(`Servidor en http://192.168.1.166:${PORT}`);
 });
