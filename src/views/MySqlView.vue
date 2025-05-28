@@ -1,33 +1,31 @@
 <script setup>
 import { ref, onMounted } from 'vue';
 
-// Variables reactivas utilizando `ref`
-const datos = ref([]); // Almacena los datos obtenidos de la base de datos
+// Reactive variables using `ref`
+const datos = ref([]); // Stores data fetched from the database
 const nuevoDato = ref({
   nombre: '',
   valor: ''
-}); // Almacena los valores para el nuevo dato a agregar
-const message = ref(''); // Mensaje para el usuario (éxito/error)
-const messageType = ref(''); // Tipo de mensaje (success/error)
+}); // Stores values for the new data to be added
+const snackbarVisible = ref(false); // Controls the visibility of the snackbar
+const snackbarMessage = ref(''); // Message for the user (success/error)
+const snackbarColor = ref(''); // Type of message (success/error)
 
-// Función para mostrar un mensaje temporal al usuario
+// Function to show a temporary message to the user using v-snackbar
 const showMessage = (msg, type = 'success') => {
-  message.value = msg;
-  messageType.value = type;
-  setTimeout(() => {
-    message.value = '';
-    messageType.value = '';
-  }, 3000); // El mensaje desaparece después de 3 segundos
+  snackbarMessage.value = msg;
+  snackbarColor.value = type === 'success' ? 'green' : 'red';
+  snackbarVisible.value = true;
 };
 
-// Método asíncrono para obtener datos de la API
+// Asynchronous method to fetch data from the API
 const obtenerDatos = async () => {
   try {
     const response = await fetch('http://localhost:3001/api/datos');
     if (!response.ok) {
       throw new Error(`HTTP error! status: ${response.status}`);
     }
-    datos.value = await response.json(); // Asigna los datos al valor de la referencia reactiva
+    datos.value = await response.json(); // Assigns data to the reactive reference value
     showMessage('Datos actualizados correctamente.', 'success');
   } catch (error) {
     console.error('Error obteniendo datos:', error);
@@ -35,9 +33,9 @@ const obtenerDatos = async () => {
   }
 };
 
-// Método asíncrono para agregar un nuevo dato a la API
+// Asynchronous method to add new data to the API
 const agregarDato = async () => {
-  // Validación básica para asegurar que los campos no estén vacíos
+  // Basic validation to ensure fields are not empty
   if (!nuevoDato.value.nombre.trim() || !nuevoDato.value.valor.trim()) {
     showMessage('Por favor, introduce un nombre y un valor.', 'error');
     return;
@@ -49,7 +47,7 @@ const agregarDato = async () => {
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify(nuevoDato.value), // Envía el valor de la referencia reactiva
+      body: JSON.stringify(nuevoDato.value), // Sends the reactive reference value
     });
 
     if (!response.ok) {
@@ -57,8 +55,8 @@ const agregarDato = async () => {
     }
 
     const resultado = await response.json();
-    datos.value.push(resultado); // Agrega el nuevo dato a la lista reactiva
-    nuevoDato.value = { nombre: '', valor: '' }; // Limpia los campos del formulario
+    datos.value.push(resultado); // Adds the new data to the reactive list
+    nuevoDato.value = { nombre: '', valor: '' }; // Clears form fields
     showMessage('Dato agregado correctamente.', 'success');
   } catch (error) {
     console.error('Error agregando dato:', error);
@@ -66,67 +64,117 @@ const agregarDato = async () => {
   }
 };
 
-// Hook de ciclo de vida `onMounted` (equivalente a `mounted` en Options API)
+// `onMounted` lifecycle hook (equivalent to `mounted` in Options API)
 onMounted(() => {
-  obtenerDatos(); // Llama a obtenerDatos cuando el componente se monta
+  obtenerDatos(); // Calls obtenerDatos when the component is mounted
 });
 </script>
 
 <template>
-  <div class="container mx-auto p-4">
-    <h1 class="text-3xl font-bold text-center mb-6 text-indigo-700">Conexión a MySQL</h1>
+  <v-app>
+    <v-main>
+      <v-container class="pa-4">
+        <h1 class="text-h4 text-center mb-6" style="color: #43a047;">Conexión a MySQL</h1>
 
-    <div class="bg-white shadow-lg rounded-lg p-6 mb-8">
-      <h2 class="text-2xl font-semibold mb-4 text-gray-800">Agregar Dato</h2>
-      <div class="flex flex-col sm:flex-row gap-4 mb-4">
-        <input
-          v-model="nuevoDato.nombre"
-          placeholder="Nombre"
-          class="flex-1 p-3 border border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500"
-        />
-        <input
-          v-model="nuevoDato.valor"
-          placeholder="Valor"
-          class="flex-1 p-3 border border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500"
-        />
-      </div>
-      <button
-        @click="agregarDato"
-        class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 px-6 rounded-md shadow-md transition duration-300 ease-in-out transform hover:-translate-y-1"
-      >
-        Agregar
-      </button>
-      <div v-if="message" :class="messageType === 'success' ? 'text-green-600' : 'text-red-600'" class="mt-4 text-center">
-        {{ message }}
-      </div>
-    </div>
+        <v-card class="mb-8" elevation="6" rounded="lg">
+          <v-card-title class="text-h5" style="color: #388e3c;">Agregar Dato</v-card-title>
+          <v-card-text>
+            <v-row dense>
+              <v-col cols="12" sm="6">
+                <v-text-field
+                  v-model="nuevoDato.nombre"
+                  label="Nombre"
+                  variant="outlined"
+                  clearable
+                  hide-details
+                ></v-text-field>
+              </v-col>
+              <v-col cols="12" sm="6">
+                <v-text-field
+                  v-model="nuevoDato.valor"
+                  label="Valor"
+                  variant="outlined"
+                  clearable
+                  hide-details
+                ></v-text-field>
+              </v-col>
+            </v-row>
+          </v-card-text>
+          <v-card-actions class="justify-center">
+            <v-btn
+              color="primary"
+              variant="elevated"
+              size="large"
+              @click="agregarDato"
+              block
+              class="text-white"
+            >
+              Agregar
+            </v-btn>
+          </v-card-actions>
+        </v-card>
 
-    <div class="bg-white shadow-lg rounded-lg p-6">
-      <h2 class="text-2xl font-semibold mb-4 text-gray-800">Datos de la Base de Datos</h2>
-      <ul class="space-y-3 mb-6">
-        <li
-          v-for="dato in datos"
-          :key="dato.id"
-          class="flex justify-between items-center bg-gray-50 p-3 rounded-md border border-gray-200"
+        <v-card elevation="6" rounded="lg">
+          <v-card-title class="text-h5" style="color: #388e3c;">Datos de la Base de Datos</v-card-title>
+          <v-card-text>
+            <v-list v-if="datos.length > 0" lines="one">
+              <v-list-item
+                v-for="dato in datos"
+                :key="dato.id"
+                class="mb-2"
+                :title="dato.nombre"
+                :subtitle="dato.valor"
+                rounded="md"
+                elevation="1"
+              >
+              </v-list-item>
+            </v-list>
+            <v-alert
+              v-else
+              type="info"
+              variant="tonal"
+              class="text-center"
+              icon="mdi-information-outline"
+            >
+              No hay datos para mostrar.
+            </v-alert>
+          </v-card-text>
+          <v-card-actions class="justify-center">
+            <v-btn
+              color="success"
+              variant="elevated"
+              size="large"
+              @click="obtenerDatos"
+              block
+              class="text-white"
+            >
+              Actualizar Datos
+            </v-btn>
+          </v-card-actions>
+        </v-card>
+
+        <v-snackbar
+          v-model="snackbarVisible"
+          :color="snackbarColor"
+          :timeout="3000"
+          location="bottom right"
         >
-          <span class="text-gray-700 font-medium">{{ dato.nombre }}:</span>
-          <span class="text-gray-600">{{ dato.valor }}</span>
-        </li>
-        <li v-if="datos.length === 0" class="text-center text-gray-500 italic">No hay datos para mostrar.</li>
-      </ul>
-      <button
-        @click="obtenerDatos"
-        class="w-full bg-green-600 hover:bg-green-700 text-white font-bold py-3 px-6 rounded-md shadow-md transition duration-300 ease-in-out transform hover:-translate-y-1"
-      >
-        Actualizar Datos
-      </button>
-    </div>
-  </div>
+          {{ snackbarMessage }}
+          <template v-slot:actions>
+            <v-btn
+              color="white"
+              variant="text"
+              @click="snackbarVisible = false"
+            >
+              Cerrar
+            </v-btn>
+          </template>
+        </v-snackbar>
+      </v-container>
+    </v-main>
+  </v-app>
 </template>
 
-
-
 <style scoped>
-/* Puedes añadir estilos específicos para este componente aquí si no usas Tailwind CSS */
-/* Aunque con Tailwind CSS, la mayoría de los estilos se aplican directamente en el template */
+/* No custom styles needed, Vuetify handles most of the styling */
 </style>
