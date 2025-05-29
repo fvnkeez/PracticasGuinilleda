@@ -72,100 +72,76 @@ onMounted(() => {
 
 <template>
   <v-app>
-    <v-main>
-      <v-container class="pa-4">
-        <h1 class="text-h4 text-center mb-6" style="color: #43a047;">Conexión a MySQL</h1>
+    <v-app-bar color="grey-darken-3" :elevation="3" rounded>
+      <template v-slot:prepend>
+        <v-app-bar-nav-icon></v-app-bar-nav-icon>
+      </template>
 
-        <v-card class="mb-8" elevation="6" rounded="lg">
-          <v-card-title class="text-h5" style="color: #388e3c;">Agregar Dato</v-card-title>
-          <v-card-text>
-            <v-row dense>
-              <v-col cols="12" sm="6">
-                <v-text-field
-                  v-model="nuevoDato.nombre"
-                  label="Nombre"
-                  variant="outlined"
-                  clearable
-                  hide-details
-                ></v-text-field>
-              </v-col>
-              <v-col cols="12" sm="6">
-                <v-text-field
-                  v-model="nuevoDato.valor"
-                  label="Valor"
-                  variant="outlined"
-                  clearable
-                  hide-details
-                ></v-text-field>
-              </v-col>
-            </v-row>
-          </v-card-text>
-          <v-card-actions class="justify-center">
-            <v-btn
-              color="primary"
-              variant="elevated"
-              size="large"
-              @click="agregarDato"
-              block
-              class="text-white"
-            >
-              Agregar
-            </v-btn>
-          </v-card-actions>
-        </v-card>
+      <v-app-bar-title>MANADATA</v-app-bar-title>
 
-        <v-card elevation="6" rounded="lg">
-          <v-card-title class="text-h5" style="color: #388e3c;">Datos de la Base de Datos</v-card-title>
-          <v-card-text>
-            <v-list v-if="datos.length > 0" lines="one">
-              <v-list-item
-                v-for="dato in datos"
-                :key="dato.id"
-                class="mb-2"
-                :title="dato.nombre"
-                :subtitle="dato.valor"
-                rounded="md"
-                elevation="1"
-              >
-              </v-list-item>
-            </v-list>
-            <v-alert
-              v-else
-              type="info"
-              variant="tonal"
-              class="text-center"
-              icon="mdi-information-outline"
-            >
-              No hay datos para mostrar.
-            </v-alert>
-          </v-card-text>
-          <v-card-actions class="justify-center">
-            <v-btn
-              color="success"
-              variant="elevated"
-              size="large"
-              @click="obtenerDatos"
-              block
-              class="text-white"
-            >
-              Actualizar Datos
-            </v-btn>
-          </v-card-actions>
-        </v-card>
+      <template v-slot:append>
+        <v-btn icon="mdi-heart"></v-btn>
 
-        <v-snackbar
-          v-model="snackbarVisible"
-          :color="snackbarColor"
-          :timeout="3000"
-          location="bottom right"
-        >
+        <v-btn icon="mdi-magnify"></v-btn>
+
+        <v-btn icon="mdi-dots-vertical"></v-btn>
+      </template>
+    </v-app-bar>
+
+    <v-main class="d-flex align-center justify-center bg-grey-darken-4"  width="1200">
+      <v-container class="">
+        <v-row>
+          <v-col cols="12" md="6">
+            <v-card class="mb-8" elevation="6" rounded="lg">
+              <v-card-title class="text-h5">Agregar Dato</v-card-title>
+              <v-card-text>
+                <v-row dense>
+                  <v-col cols="12" sm="6">
+                    <v-text-field v-model="nuevoDato.nombre" label="Nombre" variant="outlined" clearable
+                      hide-details></v-text-field>
+                  </v-col>
+                  <v-col cols="12" sm="6">
+                    <v-text-field v-model="nuevoDato.valor" label="Valor" variant="outlined" clearable
+                      hide-details></v-text-field>
+                  </v-col>
+                </v-row>
+              </v-card-text>
+              <v-card-actions class="justify-center">
+                <v-btn color="purple" variant="elevated" size="large" @click="agregarDato" block class="text-white">
+                  Agregar
+                </v-btn>
+              </v-card-actions>
+            </v-card>
+          </v-col>
+
+          <v-col cols="12" md="6">
+            <v-card elevation="6" rounded="lg">
+              <v-card-title class="text-h5">Datos de la Base de Datos</v-card-title>
+              <v-card-text>
+                <v-list v-if="datos.length > 0" lines="one">
+                  <v-list-item v-for="dato in datos" :key="dato.id" class="mb-2" :title="dato.nombre"
+                    :subtitle="dato.valor" rounded="md" elevation="1">
+                  </v-list-item>
+                </v-list>
+                <v-alert v-else type="info" variant="tonal" class="text-center" icon="mdi-information-outline">
+                  No hay datos para mostrar.
+                </v-alert>
+              </v-card-text>
+              <v-card-actions class="justify-center">
+                <v-btn color="success" variant="elevated" size="large" @click="obtenerDatos" block class="text-white">
+                  Actualizar Datos
+                </v-btn>
+              </v-card-actions>
+            </v-card>
+          </v-col>
+        </v-row>
+
+
+
+        <v-snackbar v-model="snackbarVisible" :color="snackbarColor" :timeout="3000" location="bottom right">
           {{ snackbarMessage }}
           <template v-slot:actions>
-            <v-btn
-              color="white"
-              variant="text"
-              @click="snackbarVisible = false"
-            >
+            <v-btn color="white" variant="text" @click="snackbarVisible = false">
               Cerrar
             </v-btn>
           </template>
@@ -175,6 +151,4 @@ onMounted(() => {
   </v-app>
 </template>
 
-<style scoped>
-/* No custom styles needed, Vuetify handles most of the styling */
-</style>
+<style scoped></style>

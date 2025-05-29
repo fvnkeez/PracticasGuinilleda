@@ -1,5 +1,6 @@
 import './assets/main.css'
 import 'vuetify/styles' // Importa los estilos base de Vuetify
+import '@mdi/font/css/materialdesignicons.css'
 
 import { createApp } from 'vue'
 import { createVuetify } from 'vuetify'
@@ -11,7 +12,9 @@ import App from './App.vue'
 const vuetify = createVuetify({
   components,
   directives,
-  // Opcional: Configuración del tema
+    icons: {
+    defaultSet: 'mdi',
+  },
   theme: {
     defaultTheme: 'light',
     themes: {
