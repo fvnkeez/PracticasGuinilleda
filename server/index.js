@@ -42,6 +42,6 @@ app.post('/api/datos', async (req, res) => {
 });
 
 const PORT = 3006;
-app.listen(PORT, () => {
+app.listen(PORT, '0.0.0.0', () => {
   console.log(`Servidor en http://192.168.1.166:${PORT}`);
 });
