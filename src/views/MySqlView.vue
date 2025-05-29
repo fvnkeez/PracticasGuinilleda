@@ -144,7 +144,7 @@ onMounted(() => {
                 <v-list v-if="datos.length > 0" lines="one">
                   <v-list-item v-for="dato in datos" :key="dato.id" class="mb-2" rounded="md" elevation="1">
                     <template v-slot:prepend>
-                      <v-btn icon @click="borrarDato(dato)">
+                      <v-btn icon @click="borrarDato(dato)" class="ma-2">
                         <v-icon>mdi-delete</v-icon>
                       </v-btn>
                     </template>
@@ -161,7 +161,7 @@ onMounted(() => {
                           <div class="text-subtitle-1 font-weight-medium">{{ dato.nombre }}</div>
                           <div class="text-body-2 text-grey">{{ dato.valor }}</div>
                         </div>
-                        <v-btn icon @click="datoEditando = { ...dato }">
+                        <v-btn icon @click="datoEditando = { ...dato }" class="ma-2">
                           <v-icon>mdi-pencil</v-icon>
                         </v-btn>
                       </div>
