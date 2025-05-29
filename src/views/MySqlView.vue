@@ -107,7 +107,7 @@ onMounted(() => {
       </template>
       <v-app-bar-title>MANADATA</v-app-bar-title>
       <template v-slot:append>
-        <v-btn icon="mdi-heart"></v-btn>
+        <v-btn icon="mdi-heart" color="red"></v-btn>
         <v-btn icon="mdi-magnify"></v-btn>
         <v-btn icon="mdi-dots-vertical"></v-btn>
       </template>
@@ -130,7 +130,7 @@ onMounted(() => {
                 </v-row>
               </v-card-text>
               <v-card-actions class="justify-center">
-                <v-btn color="purple" variant="elevated" size="large" @click="agregarDato" block class="text-white">
+                <v-btn color="terciary" variant="elevated" size="large" @click="agregarDato" block class="text-white">
                   Agregar
                 </v-btn>
               </v-card-actions>
@@ -141,10 +141,10 @@ onMounted(() => {
             <v-card elevation="6" rounded="lg">
               <v-card-title class="text-h5">Datos de la Base de Datos</v-card-title>
               <v-card-text>
-                <v-list v-if="datos.length > 0" lines="one">
+                <v-list v-if="datos.length> 0" lines="one" >
                   <v-list-item v-for="dato in datos" :key="dato.id" class="mb-2" rounded="md" elevation="1">
                     <template v-slot:prepend>
-                      <v-btn icon @click="borrarDato(dato)" class="ma-2">
+                      <v-btn icon @click="borrarDato(dato)" class="ma-2" color="secondary">
                         <v-icon>mdi-delete</v-icon>
                       </v-btn>
                     </template>
@@ -153,7 +153,7 @@ onMounted(() => {
                       <div v-if="datoEditando && datoEditando.id === dato.id">
                         <v-text-field v-model="datoEditando.nombre" label="Nombre" variant="outlined" dense class="mb-2" />
                         <v-text-field v-model="datoEditando.valor" label="Valor" variant="outlined" dense />
-                        <v-btn color="success" size="small" class="mt-2 me-2" @click="guardarEdicion">Guardar</v-btn>
+                        <v-btn color="terciary" size="small" class="mt-2 me-2" @click="guardarEdicion">Guardar</v-btn>
                         <v-btn color="grey" size="small" class="mt-2" @click="datoEditando = null">Cancelar</v-btn>
                       </div>
                       <div v-else class="d-flex justify-space-between align-center">
@@ -174,7 +174,7 @@ onMounted(() => {
                 </v-alert>
               </v-card-text>
               <v-card-actions class="justify-center">
-                <v-btn color="success" variant="elevated" size="large" @click="obtenerDatos" block class="text-white">
+                <v-btn color="terciary" variant="elevated" size="large" @click="obtenerDatos" block class="text-white">
                   Actualizar Datos
                 </v-btn>
               </v-card-actions>
@@ -195,4 +195,6 @@ onMounted(() => {
   </v-app>
 </template>
 
-<style scoped></style>
+<style scoped>
+
+</style>
