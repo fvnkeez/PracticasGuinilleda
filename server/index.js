@@ -44,7 +44,7 @@ app.post('/api/datos', async (req, res) => {
 app.delete('/api/datos/:id', async (req, res) => {
   const { id } = req.params;
   try {
-    await db.execute('DELETE FROM datos WHERE id = ?', [id]);
+    await db.execute('DELETE FROM usuarios WHERE id = ?', [id]);
     res.sendStatus(200);
   } catch (err) {
     console.error(err);

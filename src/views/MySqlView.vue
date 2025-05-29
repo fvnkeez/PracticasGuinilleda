@@ -64,13 +64,35 @@ const agregarDato = async () => {
   }
 };
 
+// Acción de eliminado (Corrected for Composition API)
+const borrarDato = async (dato) => {
+  const confirmado = confirm(`¿Estás seguro de que deseas eliminar "${dato.nombre}"?`);
+  if (!confirmado) return;
+  console.log('Attempting to delete dato with ID:', dato.id); // Add this line
+    console.log('Constructed URL:', `http://192.168.1.166:3006/api/datos/${dato.id}`); // Add this line
+  try {
+    // Corrected: Include the dato.id in the URL for the DELETE request
+    const response = await fetch(`http://192.168.1.166:3006/api/datos/${dato.id}`, {
+      method: 'DELETE',
+    });
+
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+
+    // Filter out the deleted item from the reactive list
+    datos.value = datos.value.filter(d => d.id !== dato.id);
+    showMessage('Dato eliminado correctamente.', 'success'); // Using the defined showMessage
+  } catch (error) {
+    console.error('Error al eliminar el dato:', error);
+    showMessage(`No se pudo eliminar el dato: ${error.message}`, 'error'); // Using the defined showMessage
+  }
+};
+
 // `onMounted` lifecycle hook (equivalent to `mounted` in Options API)
 onMounted(() => {
   obtenerDatos(); // Calls obtenerDatos when the component is mounted
 });
-
-const borrarDato = async () => {
-}
 </script>
 
 <template>
@@ -125,7 +147,7 @@ const borrarDato = async () => {
                   <v-list-item v-for="dato in datos" :key="dato.id" class="mb-2" :title="dato.nombre"
                     :subtitle="dato.valor" rounded="md" elevation="1">
                     <template v-slot:prepend>
-                      <v-btn icon @click="accionDelBoton(dato)">
+                      <v-btn icon @click="borrarDato(dato)">
                         <v-icon>mdi-delete</v-icon>
                       </v-btn>
                     </template>
