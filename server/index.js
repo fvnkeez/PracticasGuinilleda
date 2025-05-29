@@ -52,6 +52,21 @@ app.delete('/api/datos/:id', async (req, res) => {
   }
 });
 
+app.put('/api/datos/:id', async (req, res) => {
+  const { id } = req.params;
+  const { nombre, valor } = req.body;
+
+  try {
+    await db.query(
+      'UPDATE usuarios SET nombre = ?, valor = ? WHERE id = ?',
+      [nombre, valor, id]
+    );
+    res.json({ id: Number(id), nombre, valor });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
 const PORT = 3006;
 app.listen(PORT, '0.0.0.0', () => {
   console.log(`Servidor en http://192.168.1.166:${PORT}`);
