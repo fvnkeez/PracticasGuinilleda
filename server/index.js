@@ -12,7 +12,7 @@ app.use(express.json());
 
 // Configuración MySQL
 const db = await mysql.createConnection({
-  host: '192.168.1.166',
+  host: '192.168.1.229',
   user: 'Dani',
   password: 'Dani1234',
   database: 'mibbddvue'
@@ -43,5 +43,5 @@ app.post('/api/datos', async (req, res) => {
 
 const PORT = 3006;
 app.listen(PORT, () => {
-  console.log(`Servidor en http://192.168.1.166:${PORT}`);
+  console.log(`Servidor en http://192.168.1.229:${PORT}`);
 });
