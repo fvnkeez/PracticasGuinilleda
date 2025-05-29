@@ -41,6 +41,17 @@ app.post('/api/datos', async (req, res) => {
   }
 });
 
+app.delete('/api/datos/:id', async (req, res) => {
+  const { id } = req.params;
+  try {
+    await db.execute('DELETE FROM datos WHERE id = ?', [id]);
+    res.sendStatus(200);
+  } catch (err) {
+    console.error(err);
+    res.status(500).send('Error al eliminar el dato');
+  }
+});
+
 const PORT = 3006;
 app.listen(PORT, '0.0.0.0', () => {
   console.log(`Servidor en http://192.168.1.166:${PORT}`);

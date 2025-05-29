@@ -68,6 +68,9 @@ const agregarDato = async () => {
 onMounted(() => {
   obtenerDatos(); // Calls obtenerDatos when the component is mounted
 });
+
+const borrarDato = async () => {
+}
 </script>
 
 <template>
@@ -88,7 +91,7 @@ onMounted(() => {
       </template>
     </v-app-bar>
 
-    <v-main class="d-flex align-center justify-center bg-grey-darken-4"  width="1200">
+    <v-main class="d-flex align-center justify-center bg-grey-darken-4" width="1200">
       <v-container class="">
         <v-row>
           <v-col cols="12" md="6">
@@ -121,6 +124,11 @@ onMounted(() => {
                 <v-list v-if="datos.length > 0" lines="one">
                   <v-list-item v-for="dato in datos" :key="dato.id" class="mb-2" :title="dato.nombre"
                     :subtitle="dato.valor" rounded="md" elevation="1">
+                    <template v-slot:prepend>
+                      <v-btn icon @click="accionDelBoton(dato)">
+                        <v-icon>mdi-delete</v-icon>
+                      </v-btn>
+                    </template>
                   </v-list-item>
                 </v-list>
                 <v-alert v-else type="info" variant="tonal" class="text-center" icon="mdi-information-outline">
